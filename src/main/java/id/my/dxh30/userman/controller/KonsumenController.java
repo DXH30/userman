@@ -1,17 +1,15 @@
 package id.my.dxh30.userman.controller;
 
-import java.util.ArrayList;	
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -31,7 +29,7 @@ public class KonsumenController {
 		return konsumenRepository.findAll();
 	}
 	
-	@GetMapping(path="/view")
+	@GetMapping(path="/")
 	public String getView(Model model)
 	{
 		System.out.println("View Loading...");
@@ -64,7 +62,7 @@ public class KonsumenController {
 	public String deleteKonsumen(@RequestParam int id)
 	{
 		konsumenRepository.deleteById(id);
-		return "redirect:view";
+		return "redirect:/konsumen/";
 	}
 
 	@PostMapping(path="/add")
@@ -75,6 +73,7 @@ public class KonsumenController {
 			@RequestParam String provinsi,
 			@RequestParam String status
 			) {
+		System.out.println("Adding konsumen");
 		Konsumen k = new Konsumen();
 		k.setNama(nama);
 		k.setAlamat(alamat);
@@ -83,6 +82,6 @@ public class KonsumenController {
 		k.setStatus(Status.valueOf(status));
 		konsumenRepository.save(k);
 //		return "Konsumen Saved";
-		return "redirect:view";
+		return "redirect:/konsumen/";
 	}
 }
