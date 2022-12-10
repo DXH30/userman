@@ -23,10 +23,11 @@
 		</div>
 	</nav>
 	<div class="container">
-		<div class="row" style="display: none;">
-			<button id="tambahKonsumenButton" type="button"
-				class="btn btn-primary" data-bs-toggle="modal"
-				data-bs-target="#konsumenModal">Tambah Konsumen</button>
+		<div class="row">
+			<h5>Petunjuk</h5>
+			<p>Untuk menambah konsumen, anda dapat klik tombol "Tambah
+				Konsumen", untuk hapus dan edit dapat klik tombol aksi di paling
+				kanan.</p>
 		</div>
 		<div class="modal fade" id="konsumenModal" tabindex="-1"
 			aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -153,7 +154,7 @@
 					action : function(e, dt, node, config) {
 						$('#konsumenModal').modal('show');
 					},
-					className: 'btn btn-primary'
+					className : 'btn btn-primary'
 				} ]
 			};
 			table = $('#konsumenData').DataTable(options);
