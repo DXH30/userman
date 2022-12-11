@@ -18,20 +18,18 @@ import id.my.dxh30.userman.dto.Status;
 import id.my.dxh30.userman.repository.KonsumenRepository;
 
 @Controller
-@RequestMapping(path="/konsumen")
+@RequestMapping(path = "/konsumen")
 public class KonsumenController {
 	@Autowired
 	private KonsumenRepository konsumenRepository;
-	
-	@GetMapping(path="/all")
-	public @ResponseBody Iterable<Konsumen> getAllKonsumen()
-	{
+
+	@GetMapping(path = "/all")
+	public @ResponseBody Iterable<Konsumen> getAllKonsumen() {
 		return konsumenRepository.findAll();
 	}
-	
-	@GetMapping(path="/")
-	public String getView(Model model)
-	{
+
+	@GetMapping(path = "/")
+	public String getView(Model model) {
 		System.out.println("View Loading...");
 		Iterable<Konsumen> konsumen = konsumenRepository.findAll();
 		List<Konsumen> konsumenList = new ArrayList<Konsumen>();
@@ -40,7 +38,7 @@ public class KonsumenController {
 		konsumenList.forEach(item -> {
 			System.out.println(item.getAlamat());
 		});
-		
+
 		List<Integer> simple = new ArrayList<Integer>();
 		simple.add(1);
 		simple.add(2);
@@ -50,29 +48,44 @@ public class KonsumenController {
 		model.addAttribute("konsumen", konsumenList);
 		return "konsumen";
 	}
-	
-	@GetMapping(path="/get/{konsumenId}")
-	public @ResponseBody Konsumen getKonsumen(@PathVariable(value="konsumenId") int id)
-	{
+
+	@GetMapping(path = "/edit")
+	public String getEdit(@RequestParam int id, Model model) {
+		System.out.println("Loading edit...");
+		Konsumen konsumen = konsumenRepository.findById(id).orElse(null);
+		model.addAttribute("konsumen", konsumen);
+		model.addAttribute("title", "Edit konsumen");
+		return "editKonsumen";
+	}
+
+	@PostMapping(path = "/update")
+	public String updateKonsumen(@RequestParam int id, @RequestParam String nama, @RequestParam String alamat,
+			@RequestParam String kota, @RequestParam String provinsi, @RequestParam String status) {
+		Konsumen k = konsumenRepository.findById(id).orElse(null);
+		k.setNama(nama);
+		k.setAlamat(alamat);
+		k.setKota(kota);
+		k.setProvinsi(provinsi);
+		k.setStatus(Status.valueOf(status));
+		konsumenRepository.save(k);
+		return "redirect:/konsumen/";
+	}
+
+	@GetMapping(path = "/get/{konsumenId}")
+	public @ResponseBody Konsumen getKonsumen(@PathVariable(value = "konsumenId") int id) {
 		return konsumenRepository.findById(id).orElse(null);
 //				orElseThrow(() -> new KonsumenNotFoundException(id));
 	}
-	
-	@GetMapping(path="/delete")
-	public String deleteKonsumen(@RequestParam int id)
-	{
+
+	@GetMapping(path = "/delete")
+	public String deleteKonsumen(@RequestParam int id) {
 		konsumenRepository.deleteById(id);
 		return "redirect:/konsumen/";
 	}
 
-	@PostMapping(path="/add")
-	public String addNewKonsumen (
-			@RequestParam String nama,
-			@RequestParam String alamat,
-			@RequestParam String kota,
-			@RequestParam String provinsi,
-			@RequestParam String status
-			) {
+	@PostMapping(path = "/add")
+	public String addNewKonsumen(@RequestParam String nama, @RequestParam String alamat, @RequestParam String kota,
+			@RequestParam String provinsi, @RequestParam String status) {
 		System.out.println("Adding konsumen");
 		Konsumen k = new Konsumen();
 		k.setNama(nama);

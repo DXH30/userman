@@ -105,20 +105,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach items="${konsumen}" var="item">
-							<tr>
-								<td>${item.getNama()}</td>
-								<td>${item.getAlamat() }</td>
-								<td>${item.getKota() }</td>
-								<td>${item.getProvinsi() }</td>
-								<td>${item.getTglRegistrasi() }</td>
-								<td>${item.getStatus() }</td>
-								<td><a href="delete?id=${item.getId() }"
-									class="btn btn-danger"><i class="fa fa-trash"></i></a> <a
-									href="edit?id=${item.getId() }" class="btn btn-info"><i
-										class="fa fa-pencil"></i></a></td>
-							</tr>
-						</c:forEach>
+
 					</tbody>
 				</table>
 			</div>
@@ -129,11 +116,8 @@
 	<script src="/webjars/jquery/3.6.1/jquery.min.js"></script>
 
 	<script src="/webjars/datatables/1.13.1/js/jquery.dataTables.min.js"></script>
-	<script
-		src="/webjars/datatables/1.13.1/js/dataTables.bootstrap5.min.js"></script>
 	<script src="/webjars/font-awesome/6.2.0/js/all.min.js"></script>
 
-	<script src="/webjars/datatables-buttons/2.3.3/js/buttons.html5.min.js"></script>
 	<script
 		src="/webjars/datatables-buttons/2.3.3/js/buttons.colVis.min.js"></script>
 	<script
@@ -155,6 +139,43 @@
 						$('#konsumenModal').modal('show');
 					},
 					className : 'btn btn-primary'
+				} ],
+				sAjaxSource : "/konsumen/all",
+				sAjaxDataProp : "",
+				order : [ [ 0, "asc" ] ],
+				aoColumns : [ {
+					"mData" : "id"
+				}, {
+					"mData" : "alamat"
+				}, {
+					"mData" : "kota"
+				}, {
+					"mData" : "provinsi"
+				}, {
+					"data" : "tglRegistrasi",
+					"render": function(data, type, row) {
+						var time = row.tglRegistrasi;
+						var dateFormat = new Date(time);
+						return dateFormat.toLocaleDateString('id-ID');
+					}
+				}, {
+					"mData" : "status"
+				}, {
+					"data" : "aksi",
+					"render" : function(data, type, row) {
+						var urlDelete = "/konsumen/delete?id=" + row.id;
+						var linkDelete = document.createElement('a');
+						linkDelete.className="btn btn-danger"
+						linkDelete.innerHTML = `<i class="fa fa-trash"></i>`;
+						linkDelete.href = urlDelete;
+						
+						var urlEdit = "/konsumen/edit?id=" + row.id;
+						var linkEdit = document.createElement('a');
+						linkEdit.className="btn btn-info";
+						linkEdit.innerHTML = `<i class="fa fa-pencil"></i>`;
+						linkEdit.href = urlEdit;
+						return linkDelete.outerHTML + linkEdit.outerHTML;
+					}
 				} ]
 			};
 			table = $('#konsumenData').DataTable(options);
